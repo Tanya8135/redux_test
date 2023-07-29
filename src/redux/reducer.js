@@ -23,7 +23,13 @@ const tasksReducer = (state = tasksInitialState, action) => {
                 }
                 return { ...task, completed: !task.completed };
             });
+        default:
+            return state;
     }
+};
+
+const filtersInitialState = {
+    status: statusFilters.all,
 };
 
 const filtersReducer = (state = filtersInitialState, action) => {
