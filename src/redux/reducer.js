@@ -50,8 +50,8 @@
 //     filters: filtersReducer,
 // });
 
-/* After */
-import { addTask, deleteTask, toggleCompleted, setStatusFilter } from "./actions";
+/* ---------------- After using create Action ----------- */
+/* import { addTask, deleteTask, toggleCompleted, setStatusFilter } from "./actions";
 import { statusFilters } from "./constants";
 
 const tasksInitialState = [
@@ -94,4 +94,90 @@ export const filtersReducer = (state = filtersInitialState, action) => {
         default:
             return state;
     }
+}; */
+
+/* ----------- After using createReducer ---------- */
+/* virsion to RTK 2.0 */
+/* import { createReducer } from "@reduxjs/toolkit";
+import { addTask, deleteTask, toggleCompleted, setStatusFilter } from "./actions";
+import { statusFilters } from "./constants";
+
+const tasksInitialState = [
+    { id: 0, text: "Learn HTML and CSS", completed: true },
+    { id: 1, text: "Get good at JavaScript", completed: true },
+    { id: 2, text: "Master React", completed: false },
+    { id: 3, text: "Discovery Redux", completed: false },
+    { id: 4, text: "Build amazing apps", completed: false },
+];
+
+export const tasksReducer = createReducer(tasksInitialState, {
+    [addTask]: (state, action) => {
+        state.push(action.payload);
+    },
+    [deleteTask]: (state, action) => {
+        const index = state.findIndex(task => task.id === action.payload);
+        state.splice(index, 1);
+    },
+    [toggleCompleted]: (state, action) => {
+        for (const task of state) {
+            if (task.id === action.payload) {
+                task.completed = !task.completed;
+                break;
+            }
+        }
+    },
+});
+
+const filtersInitialState = {
+    status: statusFilters.all,
 };
+
+export const filtersReducer = createReducer(filtersInitialState, {
+    [setStatusFilter]: (state, action) => {
+        state.status = action.payload;
+    },
+}); */
+
+
+/* ----------- After using createReducer ---------- */
+/* virsion after RTK 2.0 */
+import { createReducer } from "@reduxjs/toolkit";
+import { addTask, deleteTask, toggleCompleted, setStatusFilter } from "./actions";
+import { statusFilters } from "./constants";
+
+const tasksInitialState = [
+    { id: 0, text: "Learn HTML and CSS", completed: true },
+    { id: 1, text: "Get good at JavaScript", completed: true },
+    { id: 2, text: "Master React", completed: false },
+    { id: 3, text: "Discovery Redux", completed: false },
+    { id: 4, text: "Build amazing apps", completed: false },
+];
+
+export const tasksReducer = createReducer(tasksInitialState, (builder) => {
+    builder
+        .addCase(addTask, (state, action) => {
+            state.push(action.payload);
+        })
+
+        .addCase(deleteTask, (state, action) => {
+            const index = state.findIndex(task => task.id === action.payload);
+            state.splice(index, 1);
+        })
+        .addCase(toggleCompleted, (state, action) => {
+            const task = state.find(task => task.id === action.payload);
+            if (task) {
+                task.completed = !task.completed;
+            }
+        })
+});
+
+const filtersInitialState = {
+    status: statusFilters.all,
+};
+
+export const filtersReducer = createReducer(filtersInitialState, (builder) => {
+    builder
+        .addCase(setStatusFilter, (state, action) => {
+            state.status = action.payload;
+        });
+});
