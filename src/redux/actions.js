@@ -1,4 +1,5 @@
-import { nanoid } from "nanoid";
+// Before
+/* import { nanoid } from "nanoid";
 
 export const addTask = text => {
     return {
@@ -30,6 +31,24 @@ export const setStatusFilter = value => {
         type: "filters/setStatusFilter",
         payload: value,
     };
-};
+}; */
 
 /* payload - це об'єкт для надсилання екшенів */
+
+/* After */
+import { createAction } from "@reduxjs/toolkit";
+import { nanoid } from "nanoid";
+
+export const addTask = createAction("tasks/addTask", text => {
+    return {
+        payload: {
+            text,
+            id: nanoid(),
+            completed: false,
+        },
+    };
+});
+
+export const deleteTask = createAction("tasks/deleteTask");
+export const toggleCompleted = createAction("tasks/toggleCompleted");
+export const setStatusFilter = createAction("filters/setStatusFilter");
